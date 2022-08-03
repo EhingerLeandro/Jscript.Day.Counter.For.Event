@@ -28,11 +28,29 @@ function addEvent(){
 	eventName.value="";
 	renderEvents();
 }
+
 function dateDif(d){
 	const targetDate = new Date(d);
 	const today = new Date();
-	const difference = targetDate.getTime() - today();
+	const difference = targetDate.getTime() - today.getTime();
 	const days =  Math.ceil(difference/(1000 * 3600 * 24));
-	return days
+	return days;
+}
+
+function renderEvents(){
+	const eventsHTML= events.map(event =>{
+		return `
+			<div class="event">
+				<div class="days">
+					<span class="days-number">${dateDif(event.date)}</span>
+					<span class="days-text">días</span>
+				</div>
+				<div class="event-name"> ${event.name}</div>
+				<div class="event-date"> ${event.date}</div>
+				<div class="actions" data-id="${event.id}">
+				<button class="bDelete">Eliminar</button>
+			</div> `;
+	});
+	eventsContainer.innerHTML = eventsHTML.join("");
 }
 
