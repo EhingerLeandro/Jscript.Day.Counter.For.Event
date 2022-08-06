@@ -6,6 +6,16 @@ const eventDate = document.getElementById("eventDate");
 const buttonAdd = document.getElementById("bAdd");
 const eventsContainer = document.querySelector("#eventsContainer");
 
+const json = load();
+try{
+	arr=JSON.parse(json);
+} catch(error){
+	arr=[];
+}
+events = arr ? [...arr] : [];
+
+renderEvents();
+
 document.querySelector("form").addEventListener('submit', evento=>{
 	evento.preventDefault();
 	addEvent();
@@ -25,6 +35,7 @@ function addEvent(){
 
 	};
 	events.unshift(newEvent);
+	save(JSON.stringify(events));
 	eventName.value="";
 	renderEvents();
 }
@@ -47,10 +58,25 @@ function renderEvents(){
 				</div>
 				<div class="event-name"> ${event.name}</div>
 				<div class="event-date"> ${event.date}</div>
-				<div class="actions" data-id="${event.id}">
-				<button class="bDelete">Eliminar</button>
+				<div class="actions" >
+				<button class="bDelete" data-id="${event.id}">Eliminar</button>
 			</div> `;
 	});
 	eventsContainer.innerHTML = eventsHTML.join("");
+	document.querySelectorAll('.bDelete').forEach(button =>{
+		button.addEventListener('click', e=>{
+			const id = button.getAttribute('data-id');
+			events = events.filter(event => event.id !== id);
+			renderEvents();
+		});
+	})
+}
+
+function save(data){
+	localStorage.setItem('items', data);
+}
+
+function load(){
+	return localStorage.getItem('items');
 }
 
