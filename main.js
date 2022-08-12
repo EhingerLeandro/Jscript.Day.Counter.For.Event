@@ -7,11 +7,10 @@ const buttonAdd = document.getElementById("bAdd");
 const eventsContainer = document.querySelector("#eventsContainer");
 
 const json = load();
-try{
-	arr=JSON.parse(json);
-} catch(error){
-	arr=[];
-}
+
+	try{arr=JSON.parse(json);} 
+	catch(error){arr=[];}
+
 events = arr ? [...arr] : [];
 
 renderEvents();
@@ -58,8 +57,9 @@ function renderEvents(){
 				</div>
 				<div class="event-name"> ${event.name}</div>
 				<div class="event-date"> ${event.date}</div>
-				<div class="actions" >
+				<div class="actions">
 				<button class="bDelete" data-id="${event.id}">Eliminar</button>
+				</div>
 			</div> `;
 	});
 	eventsContainer.innerHTML = eventsHTML.join("");
@@ -67,8 +67,12 @@ function renderEvents(){
 		button.addEventListener('click', e=>{
 			const id = button.getAttribute('data-id');
 			events = events.filter(event => event.id !== id);
-			renderEvents();
+			
+			save(JSON.stringify(events));
+
+			renderEvents(); 
 		});
+
 	})
 }
 
